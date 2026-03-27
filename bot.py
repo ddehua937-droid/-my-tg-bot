@@ -17,7 +17,8 @@ from telegram.ext import (
 
 # ── 配置 ─────────────────────────
 import os
-BOT_TOKEN = os.getenv("8702263955:AAHp4awcmEeNtnE7119ujPrPlvFv4oWMTEo")
+
+BOT_TOKEN = os.getenv("BOT_TOKEN")
 PAGE_SIZE = 6
 
 # ── 数据 ─────────────────────────
