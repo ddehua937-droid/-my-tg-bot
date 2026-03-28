@@ -174,11 +174,11 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if is_group(update):
             schedule_delete(context, msg.chat_id, msg.message_id)
     elif text == "💬 群组交流":
-        msg = await update.message.reply_text("👉 群组入口：@yourgroup")
+        msg = await update.message.reply_text("👉 亚美尼亚华人交流群：@Armenia202688")
         if is_group(update):
             schedule_delete(context, msg.chat_id, msg.message_id)
     elif text == "📢 免费商家入驻":
-        msg = await update.message.reply_text("👉 联系管理员：@admin")
+        msg = await update.message.reply_text("👉 联系管理员：@Rich3988")
         if is_group(update):
             schedule_delete(context, msg.chat_id, msg.message_id)
 
