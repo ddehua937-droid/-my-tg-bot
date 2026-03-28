@@ -158,17 +158,17 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         page = idx // PAGE_SIZE
         m = items[idx]
 
-        await query.edit_message_text(
-            f"📋 {m['name']}\n\n{m['contact']}",
-            reply_markup=detail_keyboard(category, page)
-        )
+await query.message.edit_text(
+    f"📋 {m['name']}\n\n{m['contact']}",
+    reply_markup=detail_keyboard(category, page)
+)
 
 # ── 启动 ───────────────────────
 def main():
     app = Application.builder().token(BOT_TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
-    app.add_handler(MessageHandler(filters.TEXT, handle_message))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     app.add_handler(CallbackQueryHandler(button_handler))
 
     print("机器人启动成功")
