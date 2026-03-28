@@ -23,15 +23,21 @@ DELETE_AFTER = 300  # 5分钟
 
 # ── 数据 ──────────────────────────────────────────
 merchants = {
-    "food": [
-        {"name": "🍜 张记面馆", "contact": "微信: zhangji001\n电话: 13800000001"},
-        {"name": "🍱 李家快餐", "contact": "微信: lijia002\n电话: 13800000002"},
-        {"name": "🍣 老王寿司", "contact": "微信: laowang003\n电话: 13800000003"},
-        {"name": "🥘 陈记火锅", "contact": "微信: chenji004\n电话: 13800000004"},
-        {"name": "🍕 小意餐厅", "contact": "微信: xiaoyi005\n电话: 13800000005"},
-        {"name": "🥗 绿色沙拉", "contact": "微信: green006\n电话: 13800000006"},
-        {"name": "🍔 汉堡工厂", "contact": "微信: burger007\n电话: 13800000007"},
-        {"name": "🥟 饺子王",   "contact": "微信: jiaozi008\n电话: 13800000008"},
+    "shop": [
+        {"name": "🛍️ 购物中心City",    "contact": "类别: 综合超市，食品、日用品、家居用品\n📍地址: Yerevan City Supermarket, 14 Abovyan St"},
+        {"name": "🛍️ SAS连锁超市",     "contact": "类别: 🥩 新鲜食品：肉类、海鲜、水果蔬菜\n🧀 乳制品、面包、零食\n🍷 酒水（进口比较多）\n🧴 日用品、护肤品\n🍱 现做熟食、沙拉、快餐区\n📍地址: 19 Amiryan St"},
+        {"name": "🛍️ 家乐福大型超市",  "contact": "类别: 🍖 生鲜（肉类、蔬菜、水果）\n🧀 奶制品、熟食\n🍺 酒水（进口很多）\n🍫 零食、饮料\n🧴 日用品、家居用品\n📍地址: 48/2 Northern Ave"},
+        {"name": "🛍️ 诺尔连锁超市",    "contact": "类别: 🥩 生鲜：肉类、蔬菜、水果\n🥖 面包、乳制品\n🍫 零食、饮料\n🍺 酒水\n🧴 日用品\n📍地址: 7 Nalbandyan St"},
+        {"name": "🛍️ Bravo小型超市",   "contact": "类别: 🥖 面包、牛奶、基础食品\n🍫 零食、饮料\n🍺 酒水\n🧴 日用品\n👉 主打：方便、就近购买\n📍地址: 55 Abovyan St"},
+        {"name": "🛍️ Megamall购物",    "contact": "类别: 👕 服装店（男装/女装/童装）\n👟 鞋店\n👜 包包/配饰\n📍地址: 26/1 Mashtots Ave"},
+        {"name": "🪑 IKEA家具城",       "contact": "类别: 💺 家具、家居用品\n📍地址: Tigran Mets Ave 43"},
+        {"name": "🪑 Viva家具城",       "contact": "类别: 📺 电视、音响\n❄️ 冰箱、洗衣机、空调\n🍳 厨房电器\n🪑 家具/部分家居用品\n🔌 小家电、电器设备\n📍地址: 20 Tumanyan St"},
+        {"name": "💻 ZOOD电子商品",     "contact": "类别: 📱 手机、平板\n💻 笔记本电脑\n🎧 耳机、数码配件\n📺 小型电子设备\n🔌 部分家电\n📍地址: 2 Sayat-Nova Ave"},
+        {"name": "🏬 Dalma商场",        "contact": "类别: 埃里温最经典的大型购物中心+娱乐综合体之一\n📍地址: Tsitsernakaberd Highway 3"},
+        {"name": "👔 Mall商场",         "contact": "类别: 👕 男装/女装/童装\n👟 鞋子/包包/配饰\n💄 部分美妆品牌\n100+品牌店\n📍地址: 48/2 Northern Ave"},
+        {"name": "📺 Market家具市场",   "contact": "类别: 各类家具批发，沙发、床、衣柜、办公家具\n主要面向批发商和零售商，价格相对便宜，可议价\n📍地址: Tigran Mets Ave, Yerevan"},
+        {"name": "📺 诺尔诺克家具",     "contact": "类别: 木质家具、餐桌椅、床、书柜\n集中很多家具工作室和批发点，可直接从制造商拿货\n📍地址: Nor Nork 区，Erebuni Rd 附近"},
+        {"name": "📺 塞巴斯蒂亚家具城", "contact": "类别: 办公家具、沙发、床垫、床架\n较多大型批发商，可一次采购整套家具\n📍地址: Malatia-Sebastia 区"},
     ],
     "express": [
         {"name": "📦 顺丰代收", "contact": "微信: sf001"},
@@ -39,10 +45,10 @@ merchants = {
         {"name": "🚚 极兔驿站", "contact": "微信: jitu003"},
     ],
     "tools": [
-        {"name": "🗺 地图导航",  "contact": "👉 maps.google.com"},
-        {"name": "💱 汇率换算",  "contact": "👉 xe.com"},
-        {"name": "🌤 天气查询",  "contact": "👉 weather.com"},
-        {"name": "📝 在线翻译",  "contact": "👉 translate.google.com"},
+        {"name": "🗺 地图导航", "contact": "👉 maps.google.com"},
+        {"name": "💱 汇率换算", "contact": "👉 xe.com"},
+        {"name": "🌤 天气查询", "contact": "👉 weather.com"},
+        {"name": "📝 在线翻译", "contact": "👉 translate.google.com"},
     ],
     "game": [
         {"name": "🎰 娱乐城A", "contact": "联系: @gameA"},
@@ -53,7 +59,7 @@ merchants = {
 }
 
 CAT_TITLE = {
-    "food":    "🍔 美食大全",
+    "shop":    "🛍️ 购物百货",
     "express": "📦 快递包裹",
     "tools":   "🛠 实用工具",
     "game":    "🎮 休闲娱乐",
@@ -90,7 +96,7 @@ async def safe_edit(query, text, reply_markup=None):
 # ── 键盘构建 ───────────────────────────────────────
 def reply_menu():
     return ReplyKeyboardMarkup([
-        ["🍔 美食大全", "💬 群组交流"],
+        ["🛍️ 购物百货", "💬 群组交流"],
         ["📦 快递包裹", "🛠 实用工具"],
         ["🎮 休闲娱乐", "📢 免费商家入驻"],
     ], resize_keyboard=True)
@@ -132,7 +138,7 @@ def detail_keyboard(category: str, page: int) -> InlineKeyboardMarkup:
 def main_menu_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup([
         [
-            InlineKeyboardButton("🍔 美食大全", callback_data="C:food:0"),
+            InlineKeyboardButton("🛍️ 购物百货", callback_data="C:shop:0"),
             InlineKeyboardButton("📦 快递包裹", callback_data="C:express:0"),
         ],
         [
@@ -154,7 +160,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text
     category_map = {
-        "🍔 美食大全": "food",
+        "🛍️ 购物百货": "shop",
         "📦 快递包裹": "express",
         "🛠 实用工具": "tools",
         "🎮 休闲娱乐": "game",
@@ -162,7 +168,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if text in category_map:
         cat = category_map[text]
         msg = await update.message.reply_text(
-            f"{CAT_TITLE[cat]}，点击查看联系方式👇",
+            f"{CAT_TITLE[cat]}，点击查看详情👇",
             reply_markup=merchant_keyboard(cat, 0)
         )
         if is_group(update):
@@ -210,7 +216,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 return
             await safe_edit(
                 query,
-                f"{title}，点击查看联系方式👇",
+                f"{title}，点击查看详情👇",
                 reply_markup=merchant_keyboard(category, page)
             )
             return
@@ -222,7 +228,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             items = merchants.get(category, [])
             print(f"[DEBUG] 商家详情 category={category} idx={idx} 总数={len(items)}")
             if idx >= len(items):
-                await query.answer("该商家信息不存在", show_alert=True)
+                await query.answer("该信息不存在", show_alert=True)
                 return
             merchant = items[idx]
             page = idx // PAGE_SIZE
@@ -231,13 +237,12 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await safe_edit(
                 query,
                 f"📋 {merchant['name']}\n\n"
-                f"📞 联系方式：\n{merchant['contact']}\n\n"
+                f"🔎 详情：\n{merchant['contact']}\n\n"
                 f"来自 {title}",
                 reply_markup=detail_keyboard(category, page)
             )
             return
 
-        # 未匹配任何分支
         print(f"[WARN] 未匹配的 callback_data: {repr(data)}")
         await query.answer("未知操作", show_alert=True)
 
