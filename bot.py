@@ -92,10 +92,10 @@ def detail_keyboard(category, page):
 
 # ── start ───────────────────────
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(
-        "📢 功能导航，请选择👇",
-        reply_markup=reply_menu()
-    )
+await query.edit_message_text(
+    "👇 点击商家查看",
+    reply_markup=merchant_keyboard(category, page)
+)
 
 # ── 处理底部按钮 ─────────────────
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
