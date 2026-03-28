@@ -1,3 +1,4 @@
+print("🔥🔥 BUTTON CLICKED:", query.data)
 import math
 from telegram import (
     Update,
