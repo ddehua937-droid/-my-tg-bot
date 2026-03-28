@@ -17,8 +17,9 @@ from telegram.ext import (
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 PAGE_SIZE = 6
-DELETE_AFTER = 300
+DELETE_AFTER = 300  # 5分钟
 
+# ── 数据 ──────────────────────────────────────────
 merchants = {
     "food": [
         {"name": "🍜 张记面馆", "contact": "微信: zhangji001\n电话: 13800000001"},
@@ -56,6 +57,7 @@ CAT_TITLE = {
     "game":    "🎮 休闲娱乐",
 }
 
+# ── 定时删除 ───────────────────────────────────────
 async def _do_delete(context: ContextTypes.DEFAULT_TYPE):
     try:
         await context.bot.delete_message(
@@ -75,6 +77,7 @@ def schedule_delete(context, chat_id, message_id):
 def is_group(update: Update) -> bool:
     return update.effective_chat.type in ("group", "supergroup")
 
+# ── 键盘构建 ───────────────────────────────────────
 def reply_menu():
     return ReplyKeyboardMarkup([
         ["🍔 美食大全", "💬 群组交流"],
@@ -94,9 +97,10 @@ def merchant_keyboard(category: str, page: int) -> InlineKeyboardMarkup:
         row = []
         for j, item in enumerate(page_items[i:i + 2]):
             global_idx = start + i + j
-            cb = f"M|{category}|{global_idx}"
-            print(f"[BUILD] button: {item['name']} -> callback_data={cb}")
-            row.append(InlineKeyboardButton(item["name"], callback_data=cb))
+            row.append(InlineKeyboardButton(
+                item["name"],
+                callback_data=f"M|{category}|{global_idx}"
+            ))
         keyboard.append(row)
 
     keyboard.append([
@@ -114,56 +118,49 @@ def detail_keyboard(category: str, page: int) -> InlineKeyboardMarkup:
         InlineKeyboardButton("🏠 主菜单", callback_data="main"),
     ]])
 
+# ── /start ─────────────────────────────────────────
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    print("[START] triggered")
-    msg = await update.message.reply_text("📢 功能导航，请选择👇", reply_markup=reply_menu())
+    msg = await update.message.reply_text(
+        "📢 功能导航，请选择👇",
+        reply_markup=reply_menu()
+    )
     if is_group(update):
         schedule_delete(context, msg.chat_id, msg.message_id)
 
+# ── 底部键盘处理 ───────────────────────────────────
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text
-    print(f"[MSG] received: {text}")
-
     category_map = {
         "🍔 美食大全": "food",
         "📦 快递包裹": "express",
         "🛠 实用工具": "tools",
         "🎮 休闲娱乐": "game",
     }
-
     if text in category_map:
         cat = category_map[text]
-        title = CAT_TITLE[cat]
         msg = await update.message.reply_text(
-            f"{title}，点击查看联系方式👇",
+            f"{CAT_TITLE[cat]}，点击查看联系方式👇",
             reply_markup=merchant_keyboard(cat, 0)
         )
         if is_group(update):
             schedule_delete(context, msg.chat_id, msg.message_id)
-
     elif text == "💬 群组交流":
         msg = await update.message.reply_text("👉 群组入口：@yourgroup")
         if is_group(update):
             schedule_delete(context, msg.chat_id, msg.message_id)
-
     elif text == "📢 免费商家入驻":
         msg = await update.message.reply_text("👉 联系管理员：@admin")
         if is_group(update):
             schedule_delete(context, msg.chat_id, msg.message_id)
 
+# ── Inline 按钮回调 ────────────────────────────────
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
-    print(f"[CALLBACK] raw data: '{query.data}'")
-
-    try:
-        await query.answer()
-    except Exception as e:
-        print(f"[CALLBACK] answer() error: {e}")
-
+    await query.answer()
     data = query.data
 
+    # 主菜单
     if data == "main":
-        print("[CALLBACK] -> main menu")
         await query.edit_message_text(
             "📢 请选择分类👇",
             reply_markup=InlineKeyboardMarkup([
@@ -179,15 +176,19 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return
 
+    # 分类列表
     if data.startswith("C|"):
-        parts = data.split("|")
-        print(f"[CALLBACK] -> category list, parts={parts}")
-        _, category, page_str = parts
+        _, category, page_str = data.split("|")
         page = int(page_str)
-        title = CAT_TITLE.get(category, category)
         items = merchants.get(category, [])
+        title = CAT_TITLE.get(category, category)
         if not items:
-            await query.edit_message_text(f"{title}\n\n暂无内容！")
+            await query.edit_message_text(
+                f"{title}\n\n暂无内容，敬请期待！",
+                reply_markup=InlineKeyboardMarkup([[
+                    InlineKeyboardButton("🔙 返回", callback_data="main")
+                ]])
+            )
             return
         await query.edit_message_text(
             f"{title}，点击查看联系方式👇",
@@ -195,38 +196,26 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return
 
+    # 商家详情
     if data.startswith("M|"):
-        parts = data.split("|")
-        print(f"[CALLBACK] -> merchant detail, parts={parts}")
-        _, category, idx_str = parts
+        _, category, idx_str = data.split("|")
         idx = int(idx_str)
         items = merchants.get(category, [])
-        print(f"[CALLBACK] category={category}, idx={idx}, total={len(items)}")
-
         if idx >= len(items):
-            print(f"[CALLBACK] ERROR: idx out of range")
             await query.answer("该商家信息不存在", show_alert=True)
             return
-
         merchant = items[idx]
         page = idx // PAGE_SIZE
         title = CAT_TITLE.get(category, category)
-        print(f"[CALLBACK] showing merchant: {merchant['name']}")
-
-        try:
-            await query.edit_message_text(
-                f"📋 {merchant['name']}\n\n"
-                f"📞 联系方式：\n{merchant['contact']}\n\n"
-                f"来自 {title}",
-                reply_markup=detail_keyboard(category, page)
-            )
-            print(f"[CALLBACK] edit_message_text SUCCESS")
-        except Exception as e:
-            print(f"[CALLBACK] edit_message_text FAILED: {e}")
+        await query.edit_message_text(
+            f"📋 {merchant['name']}\n\n"
+            f"📞 联系方式：\n{merchant['contact']}\n\n"
+            f"来自 {title}",
+            reply_markup=detail_keyboard(category, page)
+        )
         return
 
-    print(f"[CALLBACK] UNHANDLED data: {data}")
-
+# ── 启动 ───────────────────────────────────────────
 def main():
     app = Application.builder().token(BOT_TOKEN).build()
     app.add_handler(CommandHandler("start", start))
