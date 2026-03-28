@@ -40,7 +40,7 @@ merchants = {
     ]
 }
 
-# ── 底部菜单（重点）────────────────
+# ── 底部菜单 ─────────────────
 def reply_menu():
     keyboard = [
         ["🍔 美食大全", "💬 群组交流"],
@@ -73,7 +73,6 @@ def merchant_keyboard(category, page):
             )
         keyboard.append(row)
 
-    # 换一批 + 返回
     keyboard.append([
         InlineKeyboardButton("🔄 换一批", callback_data=f"cat:{category}:{page+1}"),
         InlineKeyboardButton("🏠 主菜单", callback_data="main")
@@ -90,12 +89,12 @@ def detail_keyboard(category, page):
         ]
     ])
 
-# ── start ───────────────────────
+# ── start（修复）────────────────
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-await query.edit_message_text(
-    "👇 点击商家查看",
-    reply_markup=merchant_keyboard(category, page)
-)
+    await update.message.reply_text(
+        "📢 功能导航，请选择👇",
+        reply_markup=reply_menu()
+    )
 
 # ── 处理底部按钮 ─────────────────
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -125,14 +124,14 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif text == "📢 免费商家入驻":
         await update.message.reply_text("👉 联系管理员：@admin")
 
-# ── 按钮处理 ────────────────────
+# ── 按钮处理（修复）────────────────
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
     data = query.data
 
     if data == "main":
-        await query.message.reply_text(
+        await query.message.edit_text(
             "📢 功能导航👇",
             reply_markup=reply_menu()
         )
@@ -142,7 +141,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         _, category, page = data.split(":")
         page = int(page)
 
-        await query.edit_message_text(
+        await query.message.edit_text(
             "👇 点击商家查看",
             reply_markup=merchant_keyboard(category, page)
         )
@@ -158,10 +157,10 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         page = idx // PAGE_SIZE
         m = items[idx]
 
-await query.message.edit_text(
-    f"📋 {m['name']}\n\n{m['contact']}",
-    reply_markup=detail_keyboard(category, page)
-)
+        await query.message.edit_text(
+            f"📋 {m['name']}\n\n{m['contact']}",
+            reply_markup=detail_keyboard(category, page)
+        )
 
 # ── 启动 ───────────────────────
 def main():
