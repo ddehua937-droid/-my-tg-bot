@@ -1,11 +1,13 @@
 import math
 import os
+import traceback
 from telegram import (
     Update,
     InlineKeyboardButton,
     InlineKeyboardMarkup,
     ReplyKeyboardMarkup
 )
+from telegram.error import BadRequest
 from telegram.ext import (
     Application,
     CommandHandler,
@@ -77,6 +79,14 @@ def schedule_delete(context, chat_id, message_id):
 def is_group(update: Update) -> bool:
     return update.effective_chat.type in ("group", "supergroup")
 
+# ── 安全 edit：Message is not modified 静默忽略 ──────
+async def safe_edit(query, text, reply_markup=None):
+    try:
+        await query.edit_message_text(text, reply_markup=reply_markup)
+    except BadRequest as e:
+        if "Message is not modified" not in str(e):
+            raise
+
 # ── 键盘构建 ───────────────────────────────────────
 def reply_menu():
     return ReplyKeyboardMarkup([
@@ -93,23 +103,21 @@ def merchant_keyboard(category: str, page: int) -> InlineKeyboardMarkup:
     page_items = items[start:start + PAGE_SIZE]
 
     keyboard = []
-    # ✅ 修复：用 enumerate(page_items) 直接拿局部索引 local_i，
-    #    再加 start 得到全局索引，避免步长为2时跳号错误
     for row_start in range(0, len(page_items), 2):
         row = []
         for local_i in range(row_start, min(row_start + 2, len(page_items))):
-            global_idx = start + local_i          # ✅ 正确的全局索引
+            global_idx = start + local_i
             item = page_items[local_i]
             row.append(InlineKeyboardButton(
                 item["name"],
-                callback_data=f"M|{category}|{global_idx}"
+                callback_data=f"M:{category}:{global_idx}"
             ))
         keyboard.append(row)
 
     keyboard.append([
         InlineKeyboardButton(
             f"🔄 换一批 ({page + 1}/{total_pages})",
-            callback_data=f"C|{category}|{page + 1}"
+            callback_data=f"C:{category}:{page + 1}"
         ),
         InlineKeyboardButton("🏠 主菜单", callback_data="main"),
     ])
@@ -117,9 +125,21 @@ def merchant_keyboard(category: str, page: int) -> InlineKeyboardMarkup:
 
 def detail_keyboard(category: str, page: int) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup([[
-        InlineKeyboardButton("🔙 返回列表", callback_data=f"C|{category}|{page}"),
+        InlineKeyboardButton("🔙 返回列表", callback_data=f"C:{category}:{page}"),
         InlineKeyboardButton("🏠 主菜单", callback_data="main"),
     ]])
+
+def main_menu_keyboard() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup([
+        [
+            InlineKeyboardButton("🍔 美食大全", callback_data="C:food:0"),
+            InlineKeyboardButton("📦 快递包裹", callback_data="C:express:0"),
+        ],
+        [
+            InlineKeyboardButton("🛠 实用工具", callback_data="C:tools:0"),
+            InlineKeyboardButton("🎮 休闲娱乐", callback_data="C:game:0"),
+        ],
+    ])
 
 # ── /start ─────────────────────────────────────────
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -159,62 +179,57 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # ── Inline 按钮回调 ────────────────────────────────
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
-    await query.answer()
     data = query.data
+    print(f"[DEBUG] callback_data={repr(data)}")
 
     try:
-        # 主菜单
+        # ── 主菜单 ──
         if data == "main":
-            await query.edit_message_text(
-                "📢 请选择分类👇",
-                reply_markup=InlineKeyboardMarkup([
-                    [
-                        InlineKeyboardButton("🍔 美食大全", callback_data="C|food|0"),
-                        InlineKeyboardButton("📦 快递包裹", callback_data="C|express|0"),
-                    ],
-                    [
-                        InlineKeyboardButton("🛠 实用工具", callback_data="C|tools|0"),
-                        InlineKeyboardButton("🎮 休闲娱乐", callback_data="C|game|0"),
-                    ],
-                ])
-            )
+            await query.answer()
+            await safe_edit(query, "📢 请选择分类👇", reply_markup=main_menu_keyboard())
             return
 
-        # ✅ 修复：split 限制最多分3段，防止 contact 含 | 时炸裂
-        parts = data.split("|", 2)
+        parts = data.split(":", 2)
+        print(f"[DEBUG] parts={parts}")
 
-        # 分类列表
+        # ── 分类列表 ──
         if parts[0] == "C" and len(parts) == 3:
             _, category, page_str = parts
             page = int(page_str)
             items = merchants.get(category, [])
             title = CAT_TITLE.get(category, category)
+            await query.answer()
             if not items:
-                await query.edit_message_text(
+                await safe_edit(
+                    query,
                     f"{title}\n\n暂无内容，敬请期待！",
                     reply_markup=InlineKeyboardMarkup([[
                         InlineKeyboardButton("🔙 返回", callback_data="main")
                     ]])
                 )
                 return
-            await query.edit_message_text(
+            await safe_edit(
+                query,
                 f"{title}，点击查看联系方式👇",
                 reply_markup=merchant_keyboard(category, page)
             )
             return
 
-        # 商家详情
+        # ── 商家详情 ──
         if parts[0] == "M" and len(parts) == 3:
             _, category, idx_str = parts
             idx = int(idx_str)
             items = merchants.get(category, [])
+            print(f"[DEBUG] 商家详情 category={category} idx={idx} 总数={len(items)}")
             if idx >= len(items):
                 await query.answer("该商家信息不存在", show_alert=True)
                 return
             merchant = items[idx]
             page = idx // PAGE_SIZE
             title = CAT_TITLE.get(category, category)
-            await query.edit_message_text(
+            await query.answer()
+            await safe_edit(
+                query,
                 f"📋 {merchant['name']}\n\n"
                 f"📞 联系方式：\n{merchant['contact']}\n\n"
                 f"来自 {title}",
@@ -222,9 +237,16 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             )
             return
 
+        # 未匹配任何分支
+        print(f"[WARN] 未匹配的 callback_data: {repr(data)}")
+        await query.answer("未知操作", show_alert=True)
+
     except Exception as e:
-        print(f"[ERROR] button_handler 异常: {e}")
-        await query.answer("出错了，请重试", show_alert=True)
+        print(f"[ERROR] button_handler 异常:\n{traceback.format_exc()}")
+        try:
+            await query.answer(f"出错: {e}", show_alert=True)
+        except Exception:
+            pass
 
 # ── 启动 ───────────────────────────────────────────
 def main():
