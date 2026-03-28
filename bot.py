@@ -31,13 +31,13 @@ merchants = {
         {"name": "🛍️ Bravo小型超市",   "contact": "类别: 🥖 面包、牛奶、基础食品\n🍫 零食、饮料\n🍺 酒水\n🧴 日用品\n👉 主打：方便、就近购买\n📍地址: 55 Abovyan St"},
         {"name": "🛍️ Megamall购物",    "contact": "类别: 👕 服装店（男装/女装/童装）\n👟 鞋店\n👜 包包/配饰\n📍地址: 26/1 Mashtots Ave"},
         {"name": "🪑 IKEA家具城",       "contact": "类别: 💺 家具、家居用品\n📍地址: Tigran Mets Ave 43"},
-        {"name": "🪑 Viva家具城",       "contact": "类别: 📺 电视、音响\n❄️ 冰箱、洗衣机、空调\n🍳 厨房电器\n🪑 家具/部分家居用品\n🔌 小家电、电器设备\n📍地址: 20 Tumanyan St"},
-        {"name": "💻 ZOOD电子商品",     "contact": "类别: 📱 手机、平板\n💻 笔记本电脑\n🎧 耳机、数码配件\n📺 小型电子设备\n🔌 部分家电\n📍地址: 2 Sayat-Nova Ave"},
+        {"name": "🪑 Viva家具城",       "contact": "类别: 📺 电视、音响\n❄️ 冰箱、洗衣机、空调\n🍳 厨房电器\n🔌 小家电\n📍地址: 20 Tumanyan St"},
+        {"name": "💻 ZOOD电子商品",     "contact": "类别: 📱 手机、平板\n💻 笔记本电脑\n🎧 耳机、数码配件\n📍地址: 2 Sayat-Nova Ave"},
         {"name": "🏬 Dalma商场",        "contact": "类别: 埃里温最经典的大型购物中心+娱乐综合体之一\n📍地址: Tsitsernakaberd Highway 3"},
         {"name": "👔 Mall商场",         "contact": "类别: 👕 男装/女装/童装\n👟 鞋子/包包/配饰\n💄 部分美妆品牌\n100+品牌店\n📍地址: 48/2 Northern Ave"},
-        {"name": "📺 Market家具市场",   "contact": "类别: 各类家具批发，沙发、床、衣柜、办公家具\n主要面向批发商和零售商，价格相对便宜，可议价\n📍地址: Tigran Mets Ave, Yerevan"},
-        {"name": "📺 诺尔诺克家具",     "contact": "类别: 木质家具、餐桌椅、床、书柜\n集中很多家具工作室和批发点，可直接从制造商拿货\n📍地址: Nor Nork 区，Erebuni Rd 附近"},
-        {"name": "📺 塞巴斯蒂亚家具城", "contact": "类别: 办公家具、沙发、床垫、床架\n较多大型批发商，可一次采购整套家具\n📍地址: Malatia-Sebastia 区"},
+        {"name": "📺 Market家具市场",   "contact": "类别: 各类家具批发，沙发、床、衣柜、办公家具\n价格相对便宜，可议价\n📍地址: Tigran Mets Ave, Yerevan"},
+        {"name": "📺 诺尔诺克家具",     "contact": "类别: 木质家具、餐桌椅、床、书柜\n可直接从制造商拿货\n📍地址: Nor Nork 区，Erebuni Rd 附近"},
+        {"name": "📺 塞巴斯蒂亚家具城", "contact": "类别: 办公家具、沙发、床垫、床架\n较多大型批发商\n📍地址: Malatia-Sebastia 区"},
     ],
     "express": [
         {"name": "📦 顺丰代收", "contact": "微信: sf001"},
@@ -82,10 +82,10 @@ def schedule_delete(context, chat_id, message_id):
         data={"chat_id": chat_id, "message_id": message_id}
     )
 
-def is_group(update: Update) -> bool:
-    return update.effective_chat.type in ("group", "supergroup")
+def is_group_chat(chat) -> bool:
+    return chat.type in ("group", "supergroup")
 
-# ── 安全 edit：Message is not modified 静默忽略 ──────
+# ── 安全 edit ──────────────────────────────────────
 async def safe_edit(query, text, reply_markup=None):
     try:
         await query.edit_message_text(text, reply_markup=reply_markup)
@@ -113,9 +113,8 @@ def merchant_keyboard(category: str, page: int) -> InlineKeyboardMarkup:
         row = []
         for local_i in range(row_start, min(row_start + 2, len(page_items))):
             global_idx = start + local_i
-            item = page_items[local_i]
             row.append(InlineKeyboardButton(
-                item["name"],
+                page_items[local_i]["name"],
                 callback_data=f"M:{category}:{global_idx}"
             ))
         keyboard.append(row)
@@ -153,7 +152,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "📢 功能导航，请选择👇",
         reply_markup=reply_menu()
     )
-    if is_group(update):
+    if is_group_chat(update.effective_chat):
         schedule_delete(context, msg.chat_id, msg.message_id)
 
 # ── 底部键盘处理 ───────────────────────────────────
@@ -171,34 +170,34 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"{CAT_TITLE[cat]}，点击查看详情👇",
             reply_markup=merchant_keyboard(cat, 0)
         )
-        if is_group(update):
+        if is_group_chat(update.effective_chat):
             schedule_delete(context, msg.chat_id, msg.message_id)
     elif text == "💬 群组交流":
         msg = await update.message.reply_text("👉 亚美尼亚华人交流群：@Armenia202688")
-        if is_group(update):
+        if is_group_chat(update.effective_chat):
             schedule_delete(context, msg.chat_id, msg.message_id)
     elif text == "📢 免费商家入驻":
         msg = await update.message.reply_text("👉 联系管理员：@Rich3988")
-        if is_group(update):
+        if is_group_chat(update.effective_chat):
             schedule_delete(context, msg.chat_id, msg.message_id)
 
 # ── Inline 按钮回调 ────────────────────────────────
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     data = query.data
-    print(f"[DEBUG] callback_data={repr(data)}")
+    chat = query.message.chat
 
     try:
-        # ── 主菜单 ──
         if data == "main":
             await query.answer()
             await safe_edit(query, "📢 请选择分类👇", reply_markup=main_menu_keyboard())
+            # 群组里重新注册删除（消息ID不变，刷新计时）
+            if is_group_chat(chat):
+                schedule_delete(context, chat.id, query.message.message_id)
             return
 
         parts = data.split(":", 2)
-        print(f"[DEBUG] parts={parts}")
 
-        # ── 分类列表 ──
         if parts[0] == "C" and len(parts) == 3:
             _, category, page_str = parts
             page = int(page_str)
@@ -213,20 +212,20 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                         InlineKeyboardButton("🔙 返回", callback_data="main")
                     ]])
                 )
-                return
-            await safe_edit(
-                query,
-                f"{title}，点击查看详情👇",
-                reply_markup=merchant_keyboard(category, page)
-            )
+            else:
+                await safe_edit(
+                    query,
+                    f"{title}，点击查看详情👇",
+                    reply_markup=merchant_keyboard(category, page)
+                )
+            if is_group_chat(chat):
+                schedule_delete(context, chat.id, query.message.message_id)
             return
 
-        # ── 商家详情 ──
         if parts[0] == "M" and len(parts) == 3:
             _, category, idx_str = parts
             idx = int(idx_str)
             items = merchants.get(category, [])
-            print(f"[DEBUG] 商家详情 category={category} idx={idx} 总数={len(items)}")
             if idx >= len(items):
                 await query.answer("该信息不存在", show_alert=True)
                 return
@@ -241,13 +240,14 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 f"来自 {title}",
                 reply_markup=detail_keyboard(category, page)
             )
+            if is_group_chat(chat):
+                schedule_delete(context, chat.id, query.message.message_id)
             return
 
-        print(f"[WARN] 未匹配的 callback_data: {repr(data)}")
         await query.answer("未知操作", show_alert=True)
 
     except Exception as e:
-        print(f"[ERROR] button_handler 异常:\n{traceback.format_exc()}")
+        print(f"[ERROR] {traceback.format_exc()}")
         try:
             await query.answer(f"出错: {e}", show_alert=True)
         except Exception:
