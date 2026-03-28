@@ -14,11 +14,11 @@ from telegram.ext import (
     filters,
     ContextTypes
 )
- 
+
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 PAGE_SIZE = 6
 DELETE_AFTER = 300  # 5分钟
- 
+
 # ── 数据 ──────────────────────────────────────────
 merchants = {
     "food": [
@@ -49,14 +49,14 @@ merchants = {
         {"name": "🃏 扑克群D",  "contact": "联系: @gameD"},
     ],
 }
- 
+
 CAT_TITLE = {
     "food":    "🍔 美食大全",
     "express": "📦 快递包裹",
     "tools":   "🛠 实用工具",
     "game":    "🎮 休闲娱乐",
 }
- 
+
 # ── 定时删除 ───────────────────────────────────────
 async def _do_delete(context: ContextTypes.DEFAULT_TYPE):
     try:
@@ -66,17 +66,17 @@ async def _do_delete(context: ContextTypes.DEFAULT_TYPE):
         )
     except Exception:
         pass
- 
+
 def schedule_delete(context, chat_id, message_id):
     context.job_queue.run_once(
         _do_delete,
         when=DELETE_AFTER,
         data={"chat_id": chat_id, "message_id": message_id}
     )
- 
+
 def is_group(update: Update) -> bool:
     return update.effective_chat.type in ("group", "supergroup")
- 
+
 # ── 键盘构建 ───────────────────────────────────────
 def reply_menu():
     return ReplyKeyboardMarkup([
@@ -84,26 +84,25 @@ def reply_menu():
         ["📦 快递包裹", "🛠 实用工具"],
         ["🎮 休闲娱乐", "📢 免费商家入驻"],
     ], resize_keyboard=True)
- 
+
 def merchant_keyboard(category: str, page: int) -> InlineKeyboardMarkup:
     items = merchants.get(category, [])
     total_pages = max(1, math.ceil(len(items) / PAGE_SIZE))
     page = page % total_pages
     start = page * PAGE_SIZE
     page_items = items[start:start + PAGE_SIZE]
- 
+
     keyboard = []
     for i in range(0, len(page_items), 2):
         row = []
         for j, item in enumerate(page_items[i:i + 2]):
             global_idx = start + i + j
-            # ✅ 用 | 分隔，避免商家名字里有冒号导致 split(":") 出错
             row.append(InlineKeyboardButton(
                 item["name"],
                 callback_data=f"M|{category}|{global_idx}"
             ))
         keyboard.append(row)
- 
+
     keyboard.append([
         InlineKeyboardButton(
             f"🔄 换一批 ({page + 1}/{total_pages})",
@@ -112,13 +111,13 @@ def merchant_keyboard(category: str, page: int) -> InlineKeyboardMarkup:
         InlineKeyboardButton("🏠 主菜单", callback_data="main"),
     ])
     return InlineKeyboardMarkup(keyboard)
- 
+
 def detail_keyboard(category: str, page: int) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup([[
         InlineKeyboardButton("🔙 返回列表", callback_data=f"C|{category}|{page}"),
         InlineKeyboardButton("🏠 主菜单", callback_data="main"),
     ]])
- 
+
 # ── /start ─────────────────────────────────────────
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     msg = await update.message.reply_text(
@@ -127,18 +126,18 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     if is_group(update):
         schedule_delete(context, msg.chat_id, msg.message_id)
- 
+
 # ── 底部键盘处理 ───────────────────────────────────
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text
- 
+
     category_map = {
         "🍔 美食大全": "food",
         "📦 快递包裹": "express",
         "🛠 实用工具": "tools",
         "🎮 休闲娱乐": "game",
     }
- 
+
     if text in category_map:
         cat = category_map[text]
         title = CAT_TITLE[cat]
@@ -148,23 +147,23 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         if is_group(update):
             schedule_delete(context, msg.chat_id, msg.message_id)
- 
+
     elif text == "💬 群组交流":
         msg = await update.message.reply_text("👉 群组入口：@yourgroup")
         if is_group(update):
             schedule_delete(context, msg.chat_id, msg.message_id)
- 
+
     elif text == "📢 免费商家入驻":
         msg = await update.message.reply_text("👉 联系管理员：@admin")
         if is_group(update):
             schedule_delete(context, msg.chat_id, msg.message_id)
- 
+
 # ── Inline 按钮回调 ────────────────────────────────
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
     data = query.data
- 
+
     # 主菜单
     if data == "main":
         await query.edit_message_text(
@@ -181,7 +180,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             ])
         )
         return
- 
+
     # 分类列表  C|category|page
     if data.startswith("C|"):
         _, category, page_str = data.split("|")
@@ -201,30 +200,29 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             reply_markup=merchant_keyboard(category, page)
         )
         return
- 
+
     # 商家详情  M|category|idx
     if data.startswith("M|"):
         _, category, idx_str = data.split("|")
         idx = int(idx_str)
         items = merchants.get(category, [])
- 
+
         if idx >= len(items):
             await query.answer("该商家信息不存在", show_alert=True)
             return
- 
+
         merchant = items[idx]
         page = idx // PAGE_SIZE
         title = CAT_TITLE.get(category, category)
- 
+
         await query.edit_message_text(
-            f"📋 *{merchant['name']}*\n\n"
+            f"📋 {merchant['name']}\n\n"
             f"📞 联系方式：\n{merchant['contact']}\n\n"
-            f"_来自 {title}_",
-            parse_mode="Markdown",
+            f"来自 {title}",
             reply_markup=detail_keyboard(category, page)
         )
         return
- 
+
 # ── 启动 ───────────────────────────────────────────
 def main():
     app = Application.builder().token(BOT_TOKEN).build()
@@ -233,6 +231,6 @@ def main():
     app.add_handler(CallbackQueryHandler(button_handler))
     print("✅ 机器人启动成功")
     app.run_polling()
- 
+
 if __name__ == "__main__":
     main()
