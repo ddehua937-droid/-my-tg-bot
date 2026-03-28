@@ -93,10 +93,13 @@ def merchant_keyboard(category: str, page: int) -> InlineKeyboardMarkup:
     page_items = items[start:start + PAGE_SIZE]
 
     keyboard = []
-    for i in range(0, len(page_items), 2):
+    # ✅ 修复：用 enumerate(page_items) 直接拿局部索引 local_i，
+    #    再加 start 得到全局索引，避免步长为2时跳号错误
+    for row_start in range(0, len(page_items), 2):
         row = []
-        for j, item in enumerate(page_items[i:i + 2]):
-            global_idx = start + i + j
+        for local_i in range(row_start, min(row_start + 2, len(page_items))):
+            global_idx = start + local_i          # ✅ 正确的全局索引
+            item = page_items[local_i]
             row.append(InlineKeyboardButton(
                 item["name"],
                 callback_data=f"M|{category}|{global_idx}"
@@ -159,61 +162,69 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await query.answer()
     data = query.data
 
-    # 主菜单
-    if data == "main":
-        await query.edit_message_text(
-            "📢 请选择分类👇",
-            reply_markup=InlineKeyboardMarkup([
-                [
-                    InlineKeyboardButton("🍔 美食大全", callback_data="C|food|0"),
-                    InlineKeyboardButton("📦 快递包裹", callback_data="C|express|0"),
-                ],
-                [
-                    InlineKeyboardButton("🛠 实用工具", callback_data="C|tools|0"),
-                    InlineKeyboardButton("🎮 休闲娱乐", callback_data="C|game|0"),
-                ],
-            ])
-        )
-        return
-
-    # 分类列表
-    if data.startswith("C|"):
-        _, category, page_str = data.split("|")
-        page = int(page_str)
-        items = merchants.get(category, [])
-        title = CAT_TITLE.get(category, category)
-        if not items:
+    try:
+        # 主菜单
+        if data == "main":
             await query.edit_message_text(
-                f"{title}\n\n暂无内容，敬请期待！",
-                reply_markup=InlineKeyboardMarkup([[
-                    InlineKeyboardButton("🔙 返回", callback_data="main")
-                ]])
+                "📢 请选择分类👇",
+                reply_markup=InlineKeyboardMarkup([
+                    [
+                        InlineKeyboardButton("🍔 美食大全", callback_data="C|food|0"),
+                        InlineKeyboardButton("📦 快递包裹", callback_data="C|express|0"),
+                    ],
+                    [
+                        InlineKeyboardButton("🛠 实用工具", callback_data="C|tools|0"),
+                        InlineKeyboardButton("🎮 休闲娱乐", callback_data="C|game|0"),
+                    ],
+                ])
             )
             return
-        await query.edit_message_text(
-            f"{title}，点击查看联系方式👇",
-            reply_markup=merchant_keyboard(category, page)
-        )
-        return
 
-    # 商家详情
-    if data.startswith("M|"):
-        _, category, idx_str = data.split("|")
-        idx = int(idx_str)
-        items = merchants.get(category, [])
-        if idx >= len(items):
-            await query.answer("该商家信息不存在", show_alert=True)
+        # ✅ 修复：split 限制最多分3段，防止 contact 含 | 时炸裂
+        parts = data.split("|", 2)
+
+        # 分类列表
+        if parts[0] == "C" and len(parts) == 3:
+            _, category, page_str = parts
+            page = int(page_str)
+            items = merchants.get(category, [])
+            title = CAT_TITLE.get(category, category)
+            if not items:
+                await query.edit_message_text(
+                    f"{title}\n\n暂无内容，敬请期待！",
+                    reply_markup=InlineKeyboardMarkup([[
+                        InlineKeyboardButton("🔙 返回", callback_data="main")
+                    ]])
+                )
+                return
+            await query.edit_message_text(
+                f"{title}，点击查看联系方式👇",
+                reply_markup=merchant_keyboard(category, page)
+            )
             return
-        merchant = items[idx]
-        page = idx // PAGE_SIZE
-        title = CAT_TITLE.get(category, category)
-        await query.edit_message_text(
-            f"📋 {merchant['name']}\n\n"
-            f"📞 联系方式：\n{merchant['contact']}\n\n"
-            f"来自 {title}",
-            reply_markup=detail_keyboard(category, page)
-        )
-        return
+
+        # 商家详情
+        if parts[0] == "M" and len(parts) == 3:
+            _, category, idx_str = parts
+            idx = int(idx_str)
+            items = merchants.get(category, [])
+            if idx >= len(items):
+                await query.answer("该商家信息不存在", show_alert=True)
+                return
+            merchant = items[idx]
+            page = idx // PAGE_SIZE
+            title = CAT_TITLE.get(category, category)
+            await query.edit_message_text(
+                f"📋 {merchant['name']}\n\n"
+                f"📞 联系方式：\n{merchant['contact']}\n\n"
+                f"来自 {title}",
+                reply_markup=detail_keyboard(category, page)
+            )
+            return
+
+    except Exception as e:
+        print(f"[ERROR] button_handler 异常: {e}")
+        await query.answer("出错了，请重试", show_alert=True)
 
 # ── 启动 ───────────────────────────────────────────
 def main():
