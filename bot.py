@@ -45,9 +45,7 @@ merchants = {
         {"name": "🚚 极兔驿站", "contact": "微信: jitu003"},
     ],
     "tools": [
-        {"name": "🗺 地图导航", "contact": "👉 maps.google.com"},
         {"name": "💱 汇率换算", "contact": "👉 xe.com"},
-        {"name": "🌤 天气查询", "contact": "👉 weather.com"},
         {"name": "📝 在线翻译", "contact": "👉 translate.google.com"},
     ],
     "game": [
