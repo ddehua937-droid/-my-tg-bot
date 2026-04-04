@@ -24,7 +24,7 @@ DELETE_AFTER = 300
 
 merchants = {
     "food": [
-        {"name": "🍽️ Mao",              "image": "https://your-image-url.com/bali.jpg",       "contact": "类别: 亚洲融合料理（中餐、寿司、点心、泰餐）\n⭐ 评分极高，环境精致\n🕐 营业时间: 12:00–00:00\n📍地址: 28 Isahakyan St, Yerevan\n📞电话: +374 55 001001\n📱Instagram: @maoyerevan"},
+        {"name": "🍽️ Mao中餐厅",              "image": "https://lh3.googleusercontent.com/gps-cs-s/AHVAweoG7c5KDBMNDy8PcHLUMdGMIBO1rZtEx9aAm-GTgcA4cLLnJZai0u4ogLdU1PIn7HtIZ6Ggz1CtooNmwg4ldO46k2wWC8-glfFAD9HI71bOJCObrLoGxjffELgGDOBWGzIY3sKaig=w408-h271-k-no",       "contact": "类别: 亚洲融合料理（中餐、寿司、点心、泰餐）\n⭐ 评分极高，环境精致\n🕐 营业时间: 12:00–00:00\n📍地址: 28 Isahakyan St, Yerevan\n📞电话: +374 55 001001\n📱Instagram: @maoyerevan"},
         {"name": "🌴 Little Bali",       "image": "https://your-image-url.com/bali.jpg",      "contact": "类别: 正宗印尼/巴厘岛料理\n⭐ 印尼厨师主理，口味地道\n🕐 营业时间: 12:00–22:00\n📍地址: Tamanyan St 1, Yerevan\n📞电话: +374 330 08009\n📱Instagram: @littlebali.am"},
         {"name": "🍖 Katsin Restaurant", "image": "https://your-image-url.com/katsin.jpg",    "contact": "类别: 海鲜、肉类料理（现代风格）\n⭐ 跳舞侍者+现场表演，气氛热烈\n🕐 营业时间: 12:00–01:00（表演从20:00开始）\n📍地址: 4/6 Amiryan St, Yerevan\n📞电话: +374 77 881001\n📱Instagram: @katsinyerevan"},
         {"name": "🍜 Ramen-Ten",         "image": "https://your-image-url.com/ramen.jpg",     "contact": "类别: 正宗日式拉面\n⭐ 埃里温最受好评的拉面专门店\n🕐 营业时间: 待确认\n📍地址: 2/5 Abovyan St, Yerevan\n📞电话: +374 95 223311\n📱Facebook: Ramen Ten Yerevan"},
@@ -76,7 +76,7 @@ merchants = {
         {"name": "🍺 Dargett精酿啤酒", "image": "", "contact": "类别: 精酿啤酒吧，20+种自酿啤酒\n⭐ 埃里温第一家精酿啤酒厂\n🕐 营业时间: 12:00–01:00\n📍地址: 70/1 Aram St, Yerevan\n📞电话: +374 10 544400"},
         {"name": "🍸 Epicure鸡尾酒吧", "image": "", "contact": "类别: 创意鸡尾酒吧，有户外露台\n⭐ 埃里温最受欢迎鸡尾酒吧之一\n🕐 营业时间: 11:00–02:00\n📍地址: Pushkin St, Yerevan"},
         {"name": "🎵 Calumet民族酒吧", "image": "", "contact": "类别: 民族风情酒吧，世界音乐+现场乐队\n⭐ 旅行者最爱，氛围独特\n🕐 营业时间: 18:00–02:00\n📍地址: 56a Pushkin St, Yerevan\n📞电话: +374 99 881173"},
-        {"name": "📚 Hemingway's酒吧", "image": "", "contact": "类别: 文艺复古酒吧（书籍+黑胶+鸡尾酒）\n⭐ 标语"Alcohol & Books"，文艺范儿\n🕐 营业时间: 12:00–02:00\n📍地址: 1a Tamanyan St, Yerevan\n📞电话: +374 98 349882"},
+        {"name": "📚 Hemingway's酒吧", "image": "", "contact": "类别: 文艺复古酒吧（书籍+黑胶+鸡尾酒）\n⭐ 标语'Alcohol & Books'，文艺范儿\n🕐 营业时间: 12:00–02:00\n📍地址: 1a Tamanyan St, Yerevan\n📞电话: +374 98 349882"},
         {"name": "🎶 Club 12爵士吧",   "image": "", "contact": "类别: 高档爵士俱乐部，海鲜+肉类料理\n⭐ 氛围优雅，法式乡村风格装修\n🕐 营业时间: 20:00–03:00\n📍地址: 28 Isahakyan St, Yerevan\n📞电话: +374 10 524211"},
         {"name": "🌃 El Sky Bar屋顶吧", "image": "", "contact": "类别: 顶楼酒吧，俯瞰埃里温全景\n⭐ DJ表演+特色鸡尾酒，奢华体验\n🕐 营业时间: 18:00–03:00\n📍地址: 市中心高层建筑顶楼, Yerevan"},
         {"name": "🎸 Simona酒吧",      "image": "", "contact": "类别: 复古潜水吧，70-80年代音乐\n⭐ 最佳鸡尾酒之一，深夜继续派对首选\n🕐 营业时间: 20:00–04:00\n📍地址: 市中心, Yerevan"},
