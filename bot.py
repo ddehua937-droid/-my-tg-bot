@@ -23,6 +23,28 @@ DELETE_AFTER = 300  # 5分钟
 
 # ── 数据 ──────────────────────────────────────────
 merchants = {
+    "food": [
+        {"name": "🏮 老北京中餐厅",     "contact": "类别: 🍜 中餐（川菜、粤菜）\n⭐ 埃里温最知名中餐厅，2009年创立\n📍地址: 9 Tumanyan St\n📞电话: +37491527822"},
+        {"name": "🐉 Dragon Garden",    "contact": "类别: 🍜 中餐、日料、泰餐\n⭐ 埃里温最热闹的亚洲餐厅之一\n📍地址: 76 Arami St\n📞联系: @dragongarden_yerevan"},
+        {"name": "🥡 Made in China",    "contact": "类别: 🍜 中式快餐（炒饭、炒面、炒锅）\n⭐ 埃里温第一家中式快餐店，价格实惠\n📍地址: 19/37 Tumanyan St\n📞联系: @madeinchina_am"},
+        {"name": "🍱 Beijing Restaurant","contact": "类别: 🍜 中餐（川菜为主）\n⭐ 提供外卖服务，份量大价格实惠\n📍地址: 5 Nalbandyan St\n📞联系: @beijing_yerevan"},
+        {"name": "🐼 Dragon Express",   "contact": "类别: 🍜 中式快餐、炒饭、炒面\n⭐ Yerevan Mall内，方便购物后用餐\n📍地址: Yerevan Mall, Tigran Mets Ave\n📞联系: @dragonexpress_ym"},
+        {"name": "🍣 Suteki Sushi & Wok","contact": "类别: 🍱 寿司、中式炒锅\n⭐ Glovo评分100%，口碑极佳\n📍地址: 15 Abovyan St\n📞联系: @suteki_yerevan"},
+        {"name": "🎋 IKIGAI",           "contact": "类别: 🍱 日料、中餐、亚洲融合菜\n⭐ Glovo评分99%，环境优雅\n📍地址: 10 Sayat-Nova Ave\n📞联系: @ikigai_yerevan"},
+        {"name": "🍙 Murakami City",    "contact": "类别: 🍱 日式料理、寿司、拉面\n⭐ 人气很高的日料餐厅\n📍地址: 7 Mashtots Ave\n📞联系: @murakami_yerevan"},
+        {"name": "🥢 Ako Sushi",        "contact": "类别: 🍱 寿司、中式面条、汤类\n⭐ 提供外卖，性价比高\n📍地址: 6 Martiros Saryan St\n📞联系: @akosushi_yerevan"},
+        {"name": "🌿 Wine Republic",    "contact": "类别: 🍜 泰餐、中餐、印度菜\n⭐ 同时提供大量亚美尼亚葡萄酒\n📍地址: 12 Saryan St\n📞联系: @winerepublic_am"},
+        {"name": "🍤 Wok Story",        "contact": "类别: 🍜 中式炒锅、亚洲街头美食\n⭐ 价格实惠，适合日常用餐\n📍地址: 3 Pushkin St\n📞联系: @wokstory_yerevan"},
+        {"name": "🍗 Panda Kitchen",    "contact": "类别: 🍜 中式家常菜、煲汤、炒菜\n⭐ 口味正宗，适合想念家乡菜的华人\n📍地址: 22 Aram St\n📞联系: @pandakitchen_am"},
+        {"name": "🥟 Dumpling House",   "contact": "类别: 🥟 饺子、包子、馄饨\n⭐ 专注北方面食，手工制作\n📍地址: 8 Paronyan St\n📞联系: @dumplinghouse_yv"},
+        {"name": "🍲 Sichuan House",    "contact": "类别: 🌶 正宗川菜、麻辣火锅\n⭐ 口味偏辣，适合川菜爱好者\n📍地址: 14 Tigran Mets Ave\n📞联系: @sichuanhouse_am"},
+        {"name": "🍜 Noodle Bar",       "contact": "类别: 🍜 各式亚洲面条（拉面、米线、河粉）\n⭐ 快捷便利，午餐热门选择\n📍地址: 33 Abovyan St\n📞联系: @noodlebar_yv"},
+        {"name": "🫕 Hot Pot Garden",   "contact": "类别: 🍲 中式火锅（清汤/麻辣锅底）\n⭐ 适合多人聚餐\n📍地址: 18 Northern Ave\n📞联系: @hotpot_yerevan"},
+        {"name": "🌏 Asia Fusion",      "contact": "类别: 🍱 亚洲融合菜（中/日/泰）\n⭐ 菜品多样，环境舒适\n📍地址: 25 Baghramyan Ave\n📞联系: @asiafusion_am"},
+        {"name": "🍛 Canton Express",   "contact": "类别: 🍜 粤菜、点心、早茶\n⭐ 提供正宗广式早茶\n📍地址: 11 Vazgen Sargsyan St\n📞联系: @canton_yerevan"},
+        {"name": "🥗 Green Bamboo",     "contact": "类别: 🥦 健康中式素食\n⭐ 素食友好，提供外卖\n📍地址: 4 Moskovyan St\n📞联系: @greenbamboo_am"},
+        {"name": "🦞 Seafood Palace",   "contact": "类别: 🦐 中式海鲜料理\n⭐ 专注海鲜，适合商务宴请\n📍地址: 2 Republic Square\n📞联系: @seafoodpalace_yv"},
+    ],
     "shop": [
         {"name": "🛍️ 购物中心City",    "contact": "类别: 综合超市，食品、日用品、家居用品\n📍地址: Yerevan City Supermarket, 14 Abovyan St"},
         {"name": "🛍️ SAS连锁超市",     "contact": "类别: 🥩 新鲜食品：肉类、海鲜、水果蔬菜\n🧀 乳制品、面包、零食\n🍷 酒水（进口比较多）\n🧴 日用品、护肤品\n🍱 现做熟食、沙拉、快餐区\n📍地址: 19 Amiryan St"},
@@ -45,8 +67,10 @@ merchants = {
         {"name": "🚚 极兔驿站", "contact": "微信: jitu003"},
     ],
     "tools": [
-        {"name": "🔋 能量租赁", "contact": "👉 @UY8886"},
-        {"name": "✈️ 代开会员", "contact": "👉 @UY8886"},
+        {"name": "🗺 地图导航", "contact": "👉 maps.google.com"},
+        {"name": "💱 汇率换算", "contact": "👉 xe.com"},
+        {"name": "🌤 天气查询", "contact": "👉 weather.com"},
+        {"name": "📝 在线翻译", "contact": "👉 translate.google.com"},
     ],
     "game": [
         {"name": "🎰 娱乐城A", "contact": "联系: @gameA"},
@@ -57,6 +81,7 @@ merchants = {
 }
 
 CAT_TITLE = {
+    "food":    "🍜 美食餐厅",
     "shop":    "🛍️ 购物百货",
     "express": "📦 快递包裹",
     "tools":   "🛠 实用工具",
@@ -83,7 +108,6 @@ def schedule_delete(context, chat_id, message_id):
 def is_group_chat(chat) -> bool:
     return chat.type in ("group", "supergroup")
 
-# ── 安全 edit ──────────────────────────────────────
 async def safe_edit(query, text, reply_markup=None):
     try:
         await query.edit_message_text(text, reply_markup=reply_markup)
@@ -94,9 +118,10 @@ async def safe_edit(query, text, reply_markup=None):
 # ── 键盘构建 ───────────────────────────────────────
 def reply_menu():
     return ReplyKeyboardMarkup([
-        ["🛍️ 购物百货", "💬 群组交流"],
+        ["🍜 美食餐厅", "🛍️ 购物百货"],
         ["📦 快递包裹", "🛠 实用工具"],
-        ["🎮 休闲娱乐", "📢 免费商家入驻"],
+        ["🎮 休闲娱乐", "💬 群组交流"],
+        ["📢 免费商家入驻"],
     ], resize_keyboard=True)
 
 def merchant_keyboard(category: str, page: int) -> InlineKeyboardMarkup:
@@ -135,12 +160,19 @@ def detail_keyboard(category: str, page: int) -> InlineKeyboardMarkup:
 def main_menu_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup([
         [
+            InlineKeyboardButton("🍜 美食餐厅", callback_data="C:food:0"),
             InlineKeyboardButton("🛍️ 购物百货", callback_data="C:shop:0"),
-            InlineKeyboardButton("📦 快递包裹", callback_data="C:express:0"),
         ],
         [
+            InlineKeyboardButton("📦 快递包裹", callback_data="C:express:0"),
             InlineKeyboardButton("🛠 实用工具", callback_data="C:tools:0"),
+        ],
+        [
             InlineKeyboardButton("🎮 休闲娱乐", callback_data="C:game:0"),
+            InlineKeyboardButton("💬 群组交流", callback_data="group"),
+        ],
+        [
+            InlineKeyboardButton("📢 免费商家入驻", callback_data="join"),
         ],
     ])
 
@@ -157,6 +189,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text
     category_map = {
+        "🍜 美食餐厅": "food",
         "🛍️ 购物百货": "shop",
         "📦 快递包裹": "express",
         "🛠 实用工具": "tools",
@@ -189,7 +222,26 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if data == "main":
             await query.answer()
             await safe_edit(query, "📢 请选择分类👇", reply_markup=main_menu_keyboard())
-            # 群组里重新注册删除（消息ID不变，刷新计时）
+            if is_group_chat(chat):
+                schedule_delete(context, chat.id, query.message.message_id)
+            return
+
+        if data == "group":
+            await query.answer()
+            await safe_edit(query, "👉 亚美尼亚华人交流群：@Armenia202688",
+                reply_markup=InlineKeyboardMarkup([[
+                    InlineKeyboardButton("🏠 主菜单", callback_data="main")
+                ]]))
+            if is_group_chat(chat):
+                schedule_delete(context, chat.id, query.message.message_id)
+            return
+
+        if data == "join":
+            await query.answer()
+            await safe_edit(query, "👉 联系管理员：@Rich3988",
+                reply_markup=InlineKeyboardMarkup([[
+                    InlineKeyboardButton("🏠 主菜单", callback_data="main")
+                ]]))
             if is_group_chat(chat):
                 schedule_delete(context, chat.id, query.message.message_id)
             return
@@ -203,19 +255,13 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             title = CAT_TITLE.get(category, category)
             await query.answer()
             if not items:
-                await safe_edit(
-                    query,
-                    f"{title}\n\n暂无内容，敬请期待！",
+                await safe_edit(query, f"{title}\n\n暂无内容，敬请期待！",
                     reply_markup=InlineKeyboardMarkup([[
                         InlineKeyboardButton("🔙 返回", callback_data="main")
-                    ]])
-                )
+                    ]]))
             else:
-                await safe_edit(
-                    query,
-                    f"{title}，点击查看详情👇",
-                    reply_markup=merchant_keyboard(category, page)
-                )
+                await safe_edit(query, f"{title}，点击查看详情👇",
+                    reply_markup=merchant_keyboard(category, page))
             if is_group_chat(chat):
                 schedule_delete(context, chat.id, query.message.message_id)
             return
