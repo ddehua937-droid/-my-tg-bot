@@ -45,8 +45,8 @@ merchants = {
         {"name": "🚚 极兔驿站", "contact": "微信: jitu003"},
     ],
     "tools": [
-        {"name": "💱 汇率换算", "contact": "👉 xe.com"},
-        {"name": "📝 在线翻译", "contact": "👉 translate.google.com"},
+        {"name": "🔋 能量租赁", "contact": "👉 @UY8886"},
+        {"name": "✈️ 代开会员", "contact": "👉 @UY8886"},
     ],
     "game": [
         {"name": "🎰 娱乐城A", "contact": "联系: @gameA"},
