@@ -200,18 +200,22 @@ async def send_or_edit(context, query, text, keyboard, image_url=None):
 # ── /start ─────────────────────────────────────────
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if is_group_chat(update.effective_chat):
-        # 群组：发一条带跳转链接的消息+群组底部单按钮
         bot_info = await context.bot.get_me()
         bot_username = bot_info.username
-        keyboard = InlineKeyboardMarkup([[
+        # 群组底部键盘：只有一个按钮
+        bottom_keyboard = ReplyKeyboardMarkup([
+            [f"🤖 点击前往小助手"]
+        ], resize_keyboard=True)
+        # 消息里也带跳转链接
+        inline_keyboard = InlineKeyboardMarkup([[
             InlineKeyboardButton(
                 "🤖 点击前往小助手",
-                url=f"https://t.me/Armenia2026bot?start=from_group"
+                url=f"https://t.me/{bot_username}?start=from_group"
             )
         ]])
         await update.message.reply_text(
             "👇 点击按钮前往小助手私聊",
-            reply_markup=keyboard
+            reply_markup=bottom_keyboard
         )
     else:
         # 私聊：正常显示完整菜单
