@@ -6,6 +6,7 @@ from telegram import (
     InlineKeyboardButton,
     InlineKeyboardMarkup,
     ReplyKeyboardMarkup,
+    ReplyKeyboardRemove,
     InputMediaPhoto
 )
 from telegram.error import BadRequest
@@ -30,10 +31,10 @@ merchants = {
         {"name": "🍖 Katsin本土餐厅", "image": "https://lh3.googleusercontent.com/gps-cs-s/AHVAwep7Va9V7SEkws5Xi4w0VQSpiqt3D_O_E1cNJeoVuKJJXGkwePNVcyyyZDehTtK41qWFqFmDR5mlvX2ZlNN9MtUYZtkJ2cuUrw78KRssuvmpv_rmqEEUNmwtcj2OWs_XzC8W3K511A=w408-h643-k-no",    "contact": "类别: 海鲜、肉类料理（现代风格）\n⭐ 跳舞侍者+现场表演，气氛热烈\n🕐 营业时间: 12:00–01:00（表演从20:00开始）\n📍地址: 4/6 Amiryan St, Yerevan\n📞电话: +374 77 881001\n📱Instagram: @katsinyerevan"},
         {"name": "🍜 Ramen日式餐馆",         "image": "https://lh3.googleusercontent.com/gps-cs-s/AHVAweqeTrr-Mw74wVo9aqdgI2q0CpXY8pzrza8qBagCznjt6o6ELuLX2Q5PW67To_2qhKLu2t-Dzdvj-ud5kSuRmGchC_fK_2Fw8A-lhGN28H_lJkn_RFEtrQzoPnTIIcKDjErQsW0=w426-h240-k-no",     "contact": "类别: 正宗日式拉面\n⭐ 埃里温最受好评的拉面专门店\n🕐 营业时间: 待确认\n📍地址: 2/5 Abovyan St, Yerevan\n📞电话: +374 95 223311\n📱Facebook: Ramen Ten Yerevan"},
         {"name": "🦆 广州烧腊餐厅",       "image": "https://lh3.googleusercontent.com/p/AF1QipP0Ua9wBZg5pH00646POYqXIgjVLFKBZETW199a=s811-k-no",      "contact": "类别: 广东烧腊/水煮牛肉\n⭐ 口味地道\n🕐 营业时间: 12:00–22:30\n📍地址: Bagrevand, 46 41st Street, Yerevan 0062\n📞电话: 093884580\n📱Instagram: 未知"},
-        {"name": "🍽️ Asador西餐",              "image": "https://lh3.googleusercontent.com/gps-cs-s/AHVAweoyYFggTneY8jdAxWcR4metQ9uQD-09P7HsX7heOD6-SfFD8iuH1pth2EdUBDw3MmHU8epc0_QFe9LiojUamPb_527RA3wSQsrKzTsNpt5D70vLUZhCuLHVWlJLSqU2CFi30jvpScMGlGBc=s1524-k-no",       "contact": "类别: 西式餐厅（牛排、寿司、点心、薯条）\n⭐ 评分极高，环境精致\n🕐 营业时间: 12:00–00:00\n📍地址: 28 Isahakyan St, Yerevan 0009\n📞电话: 044002200\n📱Instagram: @未知"},
+        {"name": "🍽️ Asador西餐",              "image": "https://lh3.googleusercontent.com/gps-cs-s/AHVAweoyYFggTneY8jdAxWcR4metQ9uQD-09P7HsX7heOD6-SfFD8iuH1pth2EdUBDw3MmHU8epc0_QFe9LiojUamPb_527RA3wSQsrKzTsNpt5D70vLUZhCuLHVWlJLSqU2CFi30jvpScMGlGBc=s1524-k-no",       "contact": "类别: 西式餐厅（牛排、寿司、点心、薯条）\n⭐ 评分极高，环境精致\n🕐 营业时间: 12:00–00:00\n📍地址: 28 Isahakyan St, Yerevan 0009\n📞电话: 044002200"},
         {"name": "🍵 Phobo越南粉",             "image": "https://lh3.googleusercontent.com/gps-proxy/ALd4DhFIJ1hgLxedgD5vjouBJCarq2XRrcjr2mSjWtT3CEtr2nh5AJFTZfGT0vcHxWMyhCmV9D9S4zj-H1-kEu9phpZGcxK7kZ-6tfrjH16uR43jNbVn59mAsg1XVjl4nIaVOF4Oo6gEZdT0p6f6DxouzAdi5x0IJpFXd079pKa8W1mJ-uydWVKiJHU=s694-k-no",     "contact": "类别: 正宗越南料理（河粉、春卷、米粉）\n⭐ 埃里温首家越南餐厅，越南厨师主理\n🕐 营业时间: 周一至周四/周日 11:00–22:00，周五至周六 11:00–23:00\n📍地址: 71 Hanrapetutyan St, Yerevan\n📞电话: +374 77 085599\n📱Instagram: @phobo.am"},
         {"name": "🏮 老北京中餐厅",      "image": "https://lh3.googleusercontent.com/gps-cs-s/AHVAwep_KyL8r1MUkwuU_qszNlB5422Iob_-BAuKX0kjwOOKMZ4zOBsl3NJ9qxxL9gZPMScEaB1xtMFbCPnLGwcn8NroG77bs1lNujlWiJ3sDrZsaP06jraElHQYNpbAGbQmUWeI2PU=w408-h271-k-no",     "contact": "类别: 🍜 中餐（川菜、粤菜，200+菜品）\n⭐ 埃里温最知名中餐厅，2009年创立\n🕐 营业时间: 12:00–00:00\n📍地址: 9 Tumanyan St, Yerevan\n📞电话: +374 91 527822"},
-        {"name": "🐉 Dragon中餐馆",     "image": "https://lh3.googleusercontent.com/gps-cs-s/AHVAweo2KP_tfoM5DrqM-CwetYoWnAtFTISGatIBJuYXtMIhECO_uzgS9iEIcwyeLPcSA3hI7oUbtnPd_fovJdyAmPU6L1KbkiHRFt2CY8CpPb1m4SmM0j5KXdiqyT93N5Ngh2x_K8H6=w408-h272-k-nog",    "contact": "类别: 🍜 中餐、日料、泰餐\n⭐ 埃里温最热闹的亚洲餐厅之一\n📍地址: 76 Arami St, Yerevan\n📞联系: @dragongarden_yerevan"},
+        {"name": "🐉 Dragon中餐馆",     "image": "https://lh3.googleusercontent.com/gps-cs-s/AHVAweo2KP_tfoM5DrqM-CwetYoWnAtFTISGatIBJuYXtMIhECO_uzgS9iEIcwyeLPcSA3hI7oUbtnPd_fovJdyAmPU6L1KbkiHRFt2CY8CpPb1m4SmM0j5KXdiqyT93N5Ngh2x_K8H6=w408-h272-k-no",    "contact": "类别: 🍜 中餐、日料、泰餐\n⭐ 埃里温最热闹的亚洲餐厅之一\n📍地址: 76 Arami St, Yerevan\n📞联系: @dragongarden_yerevan"},
         {"name": "🥡 China中餐馆",     "image": "https://lh3.googleusercontent.com/gps-cs-s/AHVAweoZSPZLgJFqwrukhvyMe4y04pyYxei_vT-ygHWSgxbFbjf3nhe8qLjkfpxJ7PlmQii4P96WUNo8x25yYfFgHT8Df0OQ6zNvH1jmFf80_dUW3EI1em6l52RLcmZLMub7WKs_nBXV=w408-h544-k-no",       "contact": "类别: 🍜 中式快餐（炒饭、炒面、炒锅）\n⭐ 埃里温第一家中式快餐店，价格实惠\n📍地址: 19/37 Tumanyan St, Yerevan\n📞联系: @madeinchina_am"},
         {"name": "🍱 Beijing中餐馆","image": "https://lh3.googleusercontent.com/gps-cs-s/AHVAwepWY6pkj8WaCq_6uwWc1qcEemzfEANZIkH0fAeGEAQjfp5zn04S2cS2xOT91WHPV98LYMNDITyK4PfeDRddnWUyubvh7sO_xLj0BlMWaihlYwj_UXSqzF1HuVHnvuuj0Pc9E1tS=w408-h272-k-no",   "contact": "类别: 🍜 中餐（川菜为主）\n⭐ 提供外卖，份量大价格实惠\n📍地址: 5 Nalbandyan St, Yerevan"},
         {"name": "🍣 Suteki寿司餐馆","image": "https://lh3.googleusercontent.com/gps-proxy/ALd4DhGvOYLew9d01FUDV7fWSnqDwPjHJWYrfeSp5dfOFHV56albb-7LCl0OcLUK8cZXVWoZAnESJf56Sl02pQ-1k3RX9a2gmNnF5pARNqofUP2fIYAAk-wMhZPeiA6awihkAQWXBdDJD0BB7LiF74l-O2qEKr5xfPTYX4W-r6dxfZk_Sqx8sKgbURbvqg=w408-h253-k-no",    "contact": "类别: 🍱 寿司、中式炒锅\n⭐ Glovo评分100%\n📍地址: 15 Abovyan St, Yerevan"},
@@ -93,35 +94,26 @@ CAT_TITLE = {
     "game":    "🎮 休闲娱乐",
 }
 
-async def _do_delete(context: ContextTypes.DEFAULT_TYPE):
-    try:
-        await context.bot.delete_message(
-            chat_id=context.job.data["chat_id"],
-            message_id=context.job.data["message_id"]
-        )
-    except Exception:
-        pass
-
-def schedule_delete(context, chat_id, message_id):
-    context.job_queue.run_once(
-        _do_delete,
-        when=DELETE_AFTER,
-        data={"chat_id": chat_id, "message_id": message_id}
-    )
-
 def is_group_chat(chat) -> bool:
     return chat.type in ("group", "supergroup")
 
 def has_real_image(merchant):
     img = merchant.get("image", "")
-    return img and not img.startswith("https://your-image-url")
+    return bool(img)
 
+# ── 私聊菜单键盘 ───────────────────────────────────
 def reply_menu():
     return ReplyKeyboardMarkup([
         ["🍜 美食餐厅", "🛍️ 购物百货"],
         ["📦 快递包裹", "🛠 实用工具"],
         ["🎮 休闲娱乐", "💬 群组交流"],
         ["📢 免费商家入驻"],
+    ], resize_keyboard=True)
+
+# ── 群组底部键盘（只有一个按钮）──────────────────
+def group_reply_menu(bot_username):
+    return ReplyKeyboardMarkup([
+        [f"🤖 点击前往小助手 @{bot_username}"],
     ], resize_keyboard=True)
 
 def merchant_keyboard(category, page):
@@ -205,12 +197,32 @@ async def send_or_edit(context, query, text, keyboard, image_url=None):
                     return query.message
                 raise
 
+# ── /start ─────────────────────────────────────────
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    msg = await update.message.reply_text("📢 功能导航，请选择👇", reply_markup=reply_menu())
     if is_group_chat(update.effective_chat):
-        schedule_delete(context, msg.chat_id, msg.message_id)
+        # 群组：发一条带跳转链接的消息+群组底部单按钮
+        bot_info = await context.bot.get_me()
+        bot_username = bot_info.username
+        keyboard = InlineKeyboardMarkup([[
+            InlineKeyboardButton(
+                "🤖 点击前往小助手",
+                url=f"https://t.me/{bot_username}?start=from_group"
+            )
+        ]])
+        await update.message.reply_text(
+            "👇 点击按钮前往小助手私聊",
+            reply_markup=keyboard
+        )
+    else:
+        # 私聊：正常显示完整菜单
+        await update.message.reply_text("📢 功能导航，请选择👇", reply_markup=reply_menu())
 
+# ── 底部键盘消息处理（只处理私聊）────────────────
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    # 群组里忽略所有文字消息
+    if is_group_chat(update.effective_chat):
+        return
+
     text = update.message.text
     category_map = {
         "🍜 美食餐厅": "food", "🛍️ 购物百货": "shop",
@@ -218,47 +230,35 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     }
     if text in category_map:
         cat = category_map[text]
-        msg = await update.message.reply_text(
+        await update.message.reply_text(
             f"{CAT_TITLE[cat]}，点击查看详情👇",
             reply_markup=merchant_keyboard(cat, 0)
         )
-        if is_group_chat(update.effective_chat):
-            schedule_delete(context, msg.chat_id, msg.message_id)
     elif text == "💬 群组交流":
-        msg = await update.message.reply_text("👉 亚美尼亚华人交流群：@Armenia202688")
-        if is_group_chat(update.effective_chat):
-            schedule_delete(context, msg.chat_id, msg.message_id)
+        await update.message.reply_text("👉 亚美尼亚华人交流群：@Armenia202688")
     elif text == "📢 免费商家入驻":
-        msg = await update.message.reply_text("👉 联系管理员：@Rich3988")
-        if is_group_chat(update.effective_chat):
-            schedule_delete(context, msg.chat_id, msg.message_id)
+        await update.message.reply_text("👉 联系管理员：@Rich3988")
 
+# ── Inline 按钮回调（私聊使用）───────────────────
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     data = query.data
-    chat = query.message.chat
 
     try:
         await query.answer()
 
         if data == "main":
-            msg = await send_or_edit(context, query, "📢 请选择分类👇", main_menu_keyboard())
-            if is_group_chat(chat):
-                schedule_delete(context, chat.id, msg.message_id)
+            await send_or_edit(context, query, "📢 请选择分类👇", main_menu_keyboard())
             return
 
         if data == "group":
-            msg = await send_or_edit(context, query, "👉 亚美尼亚华人交流群：@Armenia202688",
+            await send_or_edit(context, query, "👉 亚美尼亚华人交流群：@Armenia202688",
                 InlineKeyboardMarkup([[InlineKeyboardButton("🏠 主菜单", callback_data="main")]]))
-            if is_group_chat(chat):
-                schedule_delete(context, chat.id, msg.message_id)
             return
 
         if data == "join":
-            msg = await send_or_edit(context, query, "👉 联系管理员：@Rich3988",
+            await send_or_edit(context, query, "👉 联系管理员：@Rich3988",
                 InlineKeyboardMarkup([[InlineKeyboardButton("🏠 主菜单", callback_data="main")]]))
-            if is_group_chat(chat):
-                schedule_delete(context, chat.id, msg.message_id)
             return
 
         parts = data.split(":", 2)
@@ -269,13 +269,11 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             items = merchants.get(category, [])
             title = CAT_TITLE.get(category, category)
             if not items:
-                msg = await send_or_edit(context, query, f"{title}\n\n暂无内容，敬请期待！",
+                await send_or_edit(context, query, f"{title}\n\n暂无内容，敬请期待！",
                     InlineKeyboardMarkup([[InlineKeyboardButton("🔙 返回", callback_data="main")]]))
             else:
-                msg = await send_or_edit(context, query, f"{title}，点击查看详情👇",
+                await send_or_edit(context, query, f"{title}，点击查看详情👇",
                     merchant_keyboard(category, page))
-            if is_group_chat(chat):
-                schedule_delete(context, chat.id, msg.message_id)
             return
 
         if parts[0] == "M" and len(parts) == 3:
@@ -290,9 +288,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             title = CAT_TITLE.get(category, category)
             text = f"📋 {merchant['name']}\n\n🔎 详情：\n{merchant['contact']}\n\n来自 {title}"
             image_url = merchant["image"] if has_real_image(merchant) else None
-            msg = await send_or_edit(context, query, text, detail_keyboard(category, page), image_url)
-            if is_group_chat(chat):
-                schedule_delete(context, chat.id, msg.message_id)
+            await send_or_edit(context, query, text, detail_keyboard(category, page), image_url)
             return
 
         await query.answer("未知操作", show_alert=True)
