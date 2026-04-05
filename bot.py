@@ -210,21 +210,31 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         inline_keyboard = InlineKeyboardMarkup([[
             InlineKeyboardButton(
                 "🤖 点击前往小助手",
-                url=f"https://t.me/{bot_username}?start=from_group"
+                url=f"https://t.me/Armenia2026bot?start=from_group"
             )
         ]])
         await update.message.reply_text(
-            "👇 点击按钮前往小助手私聊",
-            reply_markup=bottom_keyboard
+            "👇 点击前往小助手私聊",
+            reply_markup=inline_keyboard
         )
     else:
         # 私聊：正常显示完整菜单
         await update.message.reply_text("📢 功能导航，请选择👇", reply_markup=reply_menu())
 
-# ── 底部键盘消息处理（只处理私聊）────────────────
+# ── 底部键盘消息处理 ─────────────────────────────
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    # 群组里忽略所有文字消息
+    # 群组里只处理「点击前往小助手」按钮
     if is_group_chat(update.effective_chat):
+        if update.message.text and "点击前往小助手" in update.message.text:
+            bot_info = await context.bot.get_me()
+            bot_username = bot_info.username
+            keyboard = InlineKeyboardMarkup([[
+                InlineKeyboardButton(
+                    "🤖 点击前往小助手",
+                    url=f"https://t.me/Armenia2026bot?start=from_group"
+                )
+            ]])
+            await update.message.reply_text("👇 点击进入私聊", reply_markup=keyboard)
         return
 
     text = update.message.text
