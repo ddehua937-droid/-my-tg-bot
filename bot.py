@@ -206,7 +206,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         keyboard = InlineKeyboardMarkup([[
             InlineKeyboardButton(
                 "🤖 点击前往小助手",
-                url=f"https://t.me/{bot_username}?start=from_group"
+                url=f"https://t.me/Armenia2026bot?start=from_group"
             )
         ]])
         await update.message.reply_text(
